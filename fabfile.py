@@ -143,4 +143,4 @@ def _install():
 
 @strict_roles('transcript')
 def _restart():
-    run("sudo /usr/systemctl restart transcript")
+    run("sudo /bin/systemctl restart transcript")
