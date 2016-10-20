@@ -1,0 +1,9 @@
+test:
+  override:
+    - echo "test"
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - fab prod r:$CIRCLE_SHA1 deploy --gateway $DEPLOY_SSH_TUNNEL_USERNAME@$DEPLOY_SSH_TUNNEL_HOST
