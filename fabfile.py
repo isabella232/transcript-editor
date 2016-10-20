@@ -92,7 +92,8 @@ def deploy(branch=None):
     if not getattr(env, 'git_revision', None):
         env.git_revision = env.git_info['revision']
     execute(_deploy_git, branch)
-    execute(_reload)
+    execute(_install)
+    execute(_restart)
 
 
 ### Git Tasks
@@ -132,5 +133,14 @@ def _git_info(branch):
 ### Service Tasks
 
 @strict_roles('transcript')
-def _reload(node='*'):
-    run("sudo /usr/systemctl reload transcript")
+def _install():
+    with cd(env.git_dir):
+        run('bundle install --path vendor/bundle')
+        run('test -e config/application.yml || ln -s /etc/transcript-editor/application.yml config/application.yml')
+        run('test -e config/database.yml || ln -s /etc/transcript-editor/database.yml config/database.yml')
+        run('RAILS_ENV=production rake db:version || RAILS_ENV=production rake db:setup')
+        run('RAILS_ENV=production rake project:load["nypr-archives"]')
+
+@strict_roles('transcript')
+def _restart():
+    run("sudo /usr/systemctl restart transcript")
