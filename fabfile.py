@@ -135,7 +135,7 @@ def _git_info(branch):
 @strict_roles('transcript')
 def _install():
     with cd(env.git_dir):
-        run('bundle install --path vendor/bundle')
+        run('bundle check --path vendor/bundle || bundle install --path vendor/bundle')
         run('test -e config/application.yml || ln -s /etc/transcript-editor/application.yml config/application.yml')
         run('test -e config/database.yml || ln -s /etc/transcript-editor/database.yml config/database.yml')
         run('RAILS_ENV=production rake db:version || RAILS_ENV=production rake db:setup')
