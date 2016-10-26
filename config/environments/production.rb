@@ -1,4 +1,7 @@
 Rails.application.configure do
+  # Enables operation behind reverse proxy
+  config.action_controller.relative_url_root = "/transcribe"
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
